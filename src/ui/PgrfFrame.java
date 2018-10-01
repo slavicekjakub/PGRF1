@@ -2,12 +2,16 @@ package ui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PgrfFrame extends JFrame {
 
+    static int FPS = 1000/60;
     private BufferedImage img; // pro vykreslovani
     static int width = 800;
     static int height = 600;
+    private JPanel panel; // musime pridat panel, protoze to nevykreslovalo
 
     public static void main(String... args) {
         PgrfFrame pgrfFrame = new PgrfFrame();
@@ -22,6 +26,18 @@ public class PgrfFrame extends JFrame {
         setSize(width,height);
         setTitle("Počítačová grafika");
 
+        panel = new JPanel();
+        add(panel);
+
+        setLocationRelativeTo(null);
+
+        Timer timer = new Timer(); // timer pro obnoveni toho vykresleni a ted uz to funguje
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                draw();
+            }
+        }, 100, FPS);
         draw();
 
     }
@@ -33,7 +49,9 @@ public class PgrfFrame extends JFrame {
             img.setRGB(200 + i,200, Color.RED.getRGB()); // udela se cara
         }
 
-        getGraphics().drawImage(img, 0,0,img.getWidth(), img.getHeight(), null); // zde ji to vykresli
+
+        panel.getGraphics().drawImage(img, 0,0,img.getWidth(), img.getHeight(), null); // zde ji to vykresli
+        panel.paintComponents(getGraphics());
     }
 
 }

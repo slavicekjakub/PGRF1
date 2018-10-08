@@ -16,6 +16,8 @@ public class Renderer {
     }
 
     private void drawPixel(int x, int y){
+        if (x < 0 || x > 800) return;
+        if (y < 0 || y > 600) return;
         img.setRGB(x,y,color);
     }
 
@@ -109,5 +111,27 @@ public class Renderer {
         }
 
 
+    }
+
+    public void polygon(int x1, int y1, int x2, int y2, int count){ //TODO: JAVA draw regular polygon (stackoverflow.com)
+        double x0 = x2 - x1;
+        double y0 = y2 - y1;
+        double circleRaridus = 2 * Math.PI;
+        double step = circleRaridus / (double) count;
+
+
+        for (double i = 0; i < circleRaridus ; i += step) {
+            //dle rotacni matice
+            double x = x0 * Math.cos(step) + y0 * Math.sin(step);
+            double y = y0 * Math.cos(step) - x0 * Math.sin(step);
+            lineDDA((int)x0 + x1,(int)y0 + y1 , (int)x + x1, (int)y + y1 );
+
+            // potreba zmenit x0, y0
+            x0 = x;
+            y0 = y;
+
+
+
+        }
     }
 }

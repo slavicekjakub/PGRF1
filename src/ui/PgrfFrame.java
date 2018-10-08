@@ -3,10 +3,7 @@ import utils.Renderer;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -20,6 +17,9 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private JPanel panel; // musime pridat panel, protoze to nevykreslovalo
     private Renderer renderer;
     private int coorX, coorY;
+    private int clickX = 300;
+    private int clickY = 300;
+    private int count = 5; // TODO: nesmi klesnout pod 3!!! ukol v modelu
 
     public static void main(String... args) {
         PgrfFrame pgrfFrame = new PgrfFrame();
@@ -42,7 +42,28 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
+                clickX = e.getX();
+                clickY = e.getY();
                 super.mouseClicked(e);
+            }
+        });
+
+        addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP){
+                    //sipka nahoru
+                    count++;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN){
+                    if (count >3){
+                        count--;
+                    }
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ADD){
+                    // je plus na numericke klavesnici a SUBTRACT je -
+                }
+                super.keyReleased(e);
             }
         });
 
@@ -65,7 +86,8 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private void draw(){
         img.getGraphics().fillRect(0,0,img.getWidth(),img.getHeight()); // prideleni pozadi
 
-        renderer.lineDDA(300,300, coorX, coorY);
+        renderer.lineDDA(clickX,clickY, coorX, coorY);
+        renderer.polygon(clickX,clickY, coorX, coorY,count);
 
 
         panel.getGraphics().drawImage(img, 0,0,img.getWidth(), img.getHeight(), null); // zde ji to vykresli

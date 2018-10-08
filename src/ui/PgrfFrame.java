@@ -65,7 +65,7 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private void draw(){
         img.getGraphics().fillRect(0,0,img.getWidth(),img.getHeight()); // prideleni pozadi
 
-        renderer.lineTrivial(300,300, coorX, coorY);
+        renderer.lineDDA(300,300, coorX, coorY);
 
 
         panel.getGraphics().drawImage(img, 0,0,img.getWidth(), img.getHeight(), null); // zde ji to vykresli

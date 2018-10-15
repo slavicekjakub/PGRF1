@@ -113,7 +113,7 @@ public class Renderer {
 
     }
 
-    public void polygon(int x1, int y1, int x2, int y2, int count){ //TODO: JAVA draw regular polygon (stackoverflow.com)
+    public void polygon(int x1, int y1, int x2, int y2, int count){
         double x0 = x2 - x1;
         double y0 = y2 - y1;
         double circleRaridus = 2 * Math.PI;

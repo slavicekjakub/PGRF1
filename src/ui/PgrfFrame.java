@@ -1,10 +1,15 @@
 package ui;
+import drawables.Drawable;
+import drawables.DrawableType;
+import drawables.Line;
 import utils.Renderer;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,7 +24,11 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private int coorX, coorY;
     private int clickX = 300;
     private int clickY = 300;
-    private int count = 5; // TODO: nesmi klesnout pod 3!!! ukol v modelu
+    private int count = 5; //nesmi klesnout pod 3!!! ukol v modelu
+
+    private List<Drawable> drawables;
+    private boolean firstClickLine = true;
+    private DrawableType type = DrawableType.LINE;
 
     public static void main(String... args) {
         PgrfFrame pgrfFrame = new PgrfFrame();
@@ -34,6 +43,8 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         setSize(width,height);
         setTitle("Počítačová grafika");
 
+        drawables = new ArrayList<>();
+
         panel = new JPanel();
         add(panel);
 
@@ -42,8 +53,23 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
         panel.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                clickX = e.getX();
-                clickY = e.getY();
+                if (type == DrawableType.LINE){
+                    //zadavani usecky
+                    if (firstClickLine){
+                        clickX = e.getX();
+                        clickY = e.getY();
+                    }else {
+                        drawables.add(new Line(clickX,clickY,e.getX(),e.getY()));
+                    }
+                }
+
+                if(type == DrawableType.N_OBJECT){
+                    //TODO: můj úhelník
+                    // znamena, ze se bude klikak a az bude dvojklik tak se spoji posledni s prvni
+                }
+
+
+                firstClickLine = !firstClickLine;
                 super.mouseClicked(e);
             }
         });
@@ -86,9 +112,16 @@ public class PgrfFrame extends JFrame implements MouseMotionListener {
     private void draw(){
         img.getGraphics().fillRect(0,0,img.getWidth(),img.getHeight()); // prideleni pozadi
 
+        /*
+        Vykreslovalo polygon
         renderer.lineDDA(clickX,clickY, coorX, coorY);
         renderer.polygon(clickX,clickY, coorX, coorY,count);
+        */
 
+        //vykreslovat vsechny objekty, ktere mame ulozene
+        for (Drawable drawable : drawables) {
+            drawable.draw(renderer);
+        }
 
         panel.getGraphics().drawImage(img, 0,0,img.getWidth(), img.getHeight(), null); // zde ji to vykresli
         panel.paintComponents(getGraphics());
